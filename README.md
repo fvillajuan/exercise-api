@@ -56,7 +56,12 @@ allo
 ## Collection Postman
 
 Une collection Postman est disponible dans `postman/Allo Monde.postman_collection.json`.
-Elle contient trois requêtes : deux pour obtenir le jeton OAuth2 et une dernière pour interroger le point d'entrée exposé par cette API.
+
+Elle contient les requêtes suivantes :
+- `1 Obtenir token avec corps de requête` : demande un jeton OAuth2 en envoyant `client_id`, `client_secret`, `grant_type` et `scope` dans le corps de la requête. Les réponses obtenues contiennent le champ `access_token`.
+- `1 Obtenir token avec auth de base` : demande un jeton OAuth2 en utilisant l'authentification HTTP Basic avec `client_id` et `client_secret`. Les réponses obtenues contiennent aussi le champ `access_token`.
+Note : la valeur du champ `access_token` doit être collée dans la variable `generatedJwt` de l'environnement Postman avant d'appeler la dernière requête.
+- `2 Dire Allo` : appelle le point d'entrée `POST http://localhost:8080/api/allo` avec le jeton JWT obtenu précédemment dans le header `Authorization`.
 
 ## Sécurité
 
