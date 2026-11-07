@@ -55,17 +55,11 @@ allo
 
 ## Collection Postman
 
-Une collection Postman est disponible dans `postman/Allo Monde.postman_collection.json`.
+Une collection Postman est disponible dans `postman/Allo Monde.postman_collection.json` et elle nécessite l’environnement `postman/Environnement Exercise.postman_environment.json` pour fonctionner correctement.
 
 Elle contient les requêtes suivantes :
 - `1 Obtenir token avec corps de requête` : demande un jeton OAuth2 en envoyant `client_id`, `client_secret`, `grant_type` et `scope` dans le corps de la requête. Les réponses obtenues contiennent le champ `access_token`.
 - `1 Obtenir token avec auth de base` : demande un jeton OAuth2 en utilisant l'authentification HTTP Basic avec `client_id` et `client_secret`. Les réponses obtenues contiennent aussi le champ `access_token`.
+- `1 Obtenir token avec jwt signé` : génère un JWT signé localement avec `client_id_jwt` et `client_secret_jwt`, puis l'envoie comme `client_assertion` pour obtenir un accès OAuth2 via le flux `client_credentials`.
 Note : la valeur du champ `access_token` doit être collée dans la variable `generatedJwt` de l'environnement Postman avant d'appeler la dernière requête.
 - `2 Dire Allo` : appelle le point d'entrée `POST http://localhost:8080/api/allo` avec le jeton JWT obtenu précédemment dans le header `Authorization`.
-
-## Sécurité
-
-Le projet utilise Spring Security avec un mode API stateless.
-La protection CSRF est désactivée car l'application est conçue comme une API REST sans session HTTP classique.
-
-Les accès sont contrôlés via les autorités OAuth2 / JWT.
