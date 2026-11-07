@@ -130,6 +130,122 @@
 			"response": []
 		},
 		{
+			"name": "1 Obtenir token avec jwt signé",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Le status est 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const clientId = pm.environment.get(\"client_id_jwt\");\r",
+							"const clientSecret = pm.environment.get(\"client_secret_jwt\");\r",
+							"const tokenEndpoint = \"http://localhost:9000/oauth2/token\";\r",
+							"\r",
+							"const header = {\r",
+							"    \"alg\": \"HS256\",\r",
+							"    \"typ\": \"JWT\"\r",
+							"};\r",
+							"\r",
+							"const now = Math.floor(Date.now() / 1000);\r",
+							"const payload = {\r",
+							"    \"iss\": clientId,\r",
+							"    \"sub\": clientId,\r",
+							"    \"aud\": tokenEndpoint,\r",
+							"    \"exp\": now + 300,\r",
+							"    \"iat\": now,\r",
+							"    \"jti\": Math.random().toString(36).substring(2)\r",
+							"};\r",
+							"\r",
+							"function base64url(source) {\r",
+							"    let encodedSource = CryptoJS.enc.Base64.stringify(source);\r",
+							"    encodedSource = encodedSource.replace(/=+$/, '');\r",
+							"    encodedSource = encodedSource.replace(/\\+/g, '-');\r",
+							"    encodedSource = encodedSource.replace(/\\//g, '_');\r",
+							"    return encodedSource;\r",
+							"}\r",
+							"\r",
+							"const stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));\r",
+							"const encodedHeader = base64url(stringifiedHeader);\r",
+							"\r",
+							"const stringifiedPayload = CryptoJS.enc.Utf8.parse(JSON.stringify(payload));\r",
+							"const encodedPayload = base64url(stringifiedPayload);\r",
+							"\r",
+							"const tokenInput = encodedHeader + \".\" + encodedPayload;\r",
+							"\r",
+							"const parsedSecret = CryptoJS.enc.Utf8.parse(clientSecret);\r",
+							"const signature = CryptoJS.HmacSHA256(tokenInput, parsedSecret);\r",
+							"const encodedSignature = base64url(signature);\r",
+							"\r",
+							"const jwtAssertion = tokenInput + \".\" + encodedSignature;\r",
+							"\r",
+							"pm.environment.set(\"jwt_assertion\", jwtAssertion);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "default"
+						},
+						{
+							"key": "scope",
+							"value": "{{scope}}",
+							"type": "default"
+						},
+						{
+							"key": "client_assertion_type",
+							"value": "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+							"type": "default"
+						},
+						{
+							"key": "client_assertion",
+							"value": "{{jwt_assertion}}",
+							"type": "default"
+						},
+						{
+							"key": "client_id",
+							"value": "{{client_id_jwt}}",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:9000/oauth2/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"oauth2",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "2 Dire Allo",
 			"event": [
 				{
