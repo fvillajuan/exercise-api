@@ -14,7 +14,13 @@
 						"exec": [
 							"pm.test(\"Le status est 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
-							"});"
+							"});\r",
+							"\r",
+							"const reponse = pm.response.json();\r",
+							"\r",
+							"if (reponse.access_token) {\r",
+							"    pm.environment.set(\"generatedJwt\", reponse.access_token);\r",
+							"}"
 						],
 						"type": "text/javascript"
 					}
@@ -75,7 +81,13 @@
 						"exec": [
 							"pm.test(\"Le status est 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
-							"});"
+							"});\r",
+							"\r",
+							"const reponse = pm.response.json();\r",
+							"\r",
+							"if (reponse.access_token) {\r",
+							"    pm.environment.set(\"generatedJwt\", reponse.access_token);\r",
+							"}"
 						],
 						"type": "text/javascript"
 					}
@@ -138,7 +150,13 @@
 						"exec": [
 							"pm.test(\"Le status est 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
-							"});"
+							"});\r",
+							"\r",
+							"const reponse = pm.response.json();\r",
+							"\r",
+							"if (reponse.access_token) {\r",
+							"    pm.environment.set(\"generatedJwt\", reponse.access_token);\r",
+							"}"
 						],
 						"type": "text/javascript"
 					}
